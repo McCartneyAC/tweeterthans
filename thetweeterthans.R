@@ -54,20 +54,16 @@ samson<-  bind_rows(
 write_csv(samson, "samson.csv")
 
 
-samson %>% 
-  filter(count %in% 20:21) %>% 
-  select(lyric) %>% 
-  summarise(vector=paste(lyric, collapse=" ")) %>% 
-  as.character() 
-#  post_tweet(token = token)
 
+gen_samson<-function() {
   
-  
-  RandomNum <- round(runif(1, 1, 2437), 0)
-  RandomNum
+  RandomNum <- round(runif(1, 1, max(samson$count)), 0)
+  plusone <- RandomNum + 1
   samson %>% 
-    filter(count == RandomNum) %>% 
+    filter(count %in% RandomNum:plusone) %>% 
     select(lyric) %>% 
     summarise(vector=paste(lyric, collapse=" ")) %>% 
     as.character() 
-  #post_tweet(token = token)
+}
+gen_samson()
+
