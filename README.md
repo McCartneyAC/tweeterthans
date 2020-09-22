@@ -1,5 +1,10 @@
 # tweeterthans
 let's try to make a tweet bot in R.
+
+https://mobile.twitter.com/tweeterthans
+
+
+
 ```
 samson = read_csv("samson.csv")
 
