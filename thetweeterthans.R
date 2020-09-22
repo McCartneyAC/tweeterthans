@@ -3,18 +3,11 @@ install.packages("rtweet")
 
 ## load rtweet package
 library(rtweet)
+library(dplyr)
 
-
+library(geniusr)
 
 setwd("C:\\Users\\Andrew\\Desktop\\Statistics and Data Analysis\\tweeterthans")
-
-consumerKey<-"gcvgy"
-consumerSecret<-"vgy"
-accessToken<-"1308167758245396483-nmi"
-accessTokenSecret<-" hgy"
-
-
-# setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 
 ## authenticate via web browser
@@ -25,14 +18,14 @@ token <- create_token(
   access_token = accessToken,
   access_secret = accessTokenSecret)
 
+
 token
+get_token() # wtf
+
+# post_tweet(status = "Waking up each morning with confusion in my eyes Wind is biting through to wave hello", token = token)
 
 
-post_tweet(status = "I can't remember the sound you found for me", token = token)
-get_token()
 
-
-library(geniusr)
 fallow <- genius_album(artist = "The Weakerthans", album = "Fallow")
 leftleaving<-genius_album(artist = "The Weakerthans", album = "Left and Leaving")
 reconstruction<-genius_album(artist = "The Weakerthans", album = "Reconstruction Site")
@@ -40,10 +33,41 @@ reunion<-genius_album(artist = "The Weakerthans", album = "Reunion Tour")
 provincial<-genius_album(artist = "John K Samson", album = "Provincial")
 winter<-genius_album(artist = "John K Samson", album = "Winter Wheat")
 tangles<-genius_album(artist = "John K Samson", album = "Slips and Tangles")
+gifts<-genius_album(artist = "Propagandhi", album = "Less talk More rock") %>% 
+  filter(song == "Gifts")
+fantasy <- genius_lyrics(artist = "John K Samson", 
+                         song = "Fantasy Baseball at the End of the World") %>% 
+  mutate(track_n = 1) %>% 
+  select(track_n, line, lyric, track_title)
+fantasy
+
+samson<-  bind_rows(
+  tangles, gifts, fallow, leftleaving, reconstruction, 
+  reunion, provincial, winter, fantasy,  
+  .id = "album"
+) %>% 
+  mutate(count = row_number())
 
 
-samson<-bind_rows(
-  tangles, fallow, leftleaving, reconstruction, reunion, provincial, winter
-)
-samson
+
+
 write_csv(samson, "samson.csv")
+
+
+samson %>% 
+  filter(count %in% 20:21) %>% 
+  select(lyric) %>% 
+  summarise(vector=paste(lyric, collapse=" ")) %>% 
+  as.character() 
+#  post_tweet(token = token)
+
+  
+  
+  RandomNum <- round(runif(1, 1, 2437), 0)
+  RandomNum
+  samson %>% 
+    filter(count == RandomNum) %>% 
+    select(lyric) %>% 
+    summarise(vector=paste(lyric, collapse=" ")) %>% 
+    as.character() 
+  #post_tweet(token = token)
