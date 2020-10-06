@@ -17,6 +17,28 @@ gen_samson<-function() {
     as.character() 
 }
 
+gen_samson2 <-function() { 
+  RandomNum <- round(runif(1, 1, max(samson$count)), 0)
+  plusone <- RandomNum + 1
+  
+  
+  samson %>% 
+    filter(count == RandomNum) -> specs
+  
+  album_spec <- specs$album
+  track_n_spec<-specs$track_n
+  
+  samson %>% 
+    filter(album == album_spec) %>% 
+    filter(track_n == track_n_spec) %>% 
+    filter(count %in% RandomNum:plusone)%>% 
+    select(lyric)  %>% 
+    summarise(vector=paste(lyric, collapse=" ")) %>% 
+    as.character() %>% 
+    cat()
+  
+}
+
 consumerKey<-""
 consumerSecret<-""
 accessToken<-"-"
@@ -32,6 +54,6 @@ token <- create_token(
   access_secret = accessTokenSecret)
 
 
-gen_samson() %>% 
+gen_samson2() %>% 
   post_tweet(token = token)
 

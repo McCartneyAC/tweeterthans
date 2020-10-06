@@ -4,7 +4,7 @@ install.packages("rtweet")
 ## load rtweet package
 library(rtweet)
 library(dplyr)
-
+library(readr)
 library(geniusr)
 
 setwd("C:\\Users\\Andrew\\Desktop\\Statistics and Data Analysis\\tweeterthans")
@@ -34,7 +34,7 @@ provincial<-genius_album(artist = "John K Samson", album = "Provincial")
 winter<-genius_album(artist = "John K Samson", album = "Winter Wheat")
 tangles<-genius_album(artist = "John K Samson", album = "Slips and Tangles")
 gifts<-genius_album(artist = "Propagandhi", album = "Less talk More rock") %>% 
-  filter(song == "Gifts")
+  filter(track_title == "Gifts")
 fantasy <- genius_lyrics(artist = "John K Samson", 
                          song = "Fantasy Baseball at the End of the World") %>% 
   mutate(track_n = 1) %>% 
@@ -52,7 +52,7 @@ samson<-  bind_rows(
 
 
 write_csv(samson, "samson.csv")
-
+samson <- use("C:\\Users\\Andrew\\Desktop\\Statistics and Data Analysis\\tweeterthans\\samson.csv")
 
 
 gen_samson<-function() {
@@ -61,9 +61,36 @@ gen_samson<-function() {
   plusone <- RandomNum + 1
   samson %>% 
     filter(count %in% RandomNum:plusone) %>% 
-    select(lyric) %>% 
+    select(lyric)  %>% 
     summarise(vector=paste(lyric, collapse=" ")) %>% 
     as.character() 
 }
 gen_samson()
+names(samson)
+samson
+
+
+gen_samson2 <-function() { 
+  RandomNum <- round(runif(1, 1, max(samson$count)), 0)
+  plusone <- RandomNum + 1
+  
+  
+  samson %>% 
+    filter(count == RandomNum) -> specs
+  
+  album_spec <- specs$album
+  track_n_spec<-specs$track_n
+  
+  samson %>% 
+    filter(album == album_spec) %>% 
+    filter(track_n == track_n_spec) %>% 
+    filter(count %in% RandomNum:plusone)%>% 
+    select(lyric)  %>% 
+    summarise(vector=paste(lyric, collapse=" ")) %>% 
+    as.character() %>% 
+    cat()
+  
+}
+gen_samson2()
+
 
