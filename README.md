@@ -5,7 +5,7 @@ https://mobile.twitter.com/tweeterthans
 
 
 
-```
+``` r
 samson = read_csv("samson.csv")
 
 
@@ -21,7 +21,7 @@ gen_samson<-function() {
 }
 ```
 
-```
+``` r
 > gen_samson()
 [1] "What will I do now? What will I do now?"
 ```
